@@ -1,0 +1,512 @@
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Тест: Типы химических реакций</title>
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg, #e0f2fe, #f0f4f8, #dbeafe);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    color: #1e293b;
+}
+
+.container {
+    width: 100%;
+    max-width: 700px;
+    background: white;
+    border-radius: 20px;
+    padding: 35px;
+    box-shadow: 0 12px 40px rgba(15, 23, 42, 0.12);
+}
+
+h1 {
+    text-align: center;
+    font-size: 26px;
+    margin-top: 0;
+    margin-bottom: 25px;
+    color: #1e3a8a;
+}
+
+.subtitle {
+    text-align: center;
+    color: #64748b;
+    margin-bottom: 25px;
+}
+
+.progress-info {
+    display: flex;
+    justify-content: space-between;
+    font-weight: bold;
+    font-size: 14px;
+    color: #64748b;
+    margin-bottom: 10px;
+}
+
+.progress-bar {
+    height: 9px;
+    background: #e2e8f0;
+    border-radius: 20px;
+    overflow: hidden;
+    margin-bottom: 25px;
+}
+
+.progress {
+    height: 100%;
+    width: 0%;
+    background: #2563eb;
+    transition: width 0.3s;
+}
+
+.question {
+    font-size: 19px;
+    font-weight: bold;
+    line-height: 1.5;
+    margin-bottom: 25px;
+}
+
+.options {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.option {
+    width: 100%;
+    padding: 16px;
+    border: 2px solid #e2e8f0;
+    border-radius: 12px;
+    background: #fff;
+    color: #1e293b;
+    font-size: 16px;
+    text-align: left;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.option:hover:not(:disabled) {
+    background: #eff6ff;
+    border-color: #60a5fa;
+    transform: translateY(-2px);
+}
+
+.option:disabled {
+    cursor: default;
+    opacity: 1;
+}
+
+.option.correct {
+    background: #d1fae5;
+    border-color: #10b981;
+    color: #065f46;
+}
+
+.option.wrong {
+    background: #fee2e2;
+    border-color: #ef4444;
+    color: #991b1b;
+}
+
+.result {
+    text-align: center;
+    padding: 20px 0;
+}
+
+.result h2 {
+    font-size: 28px;
+    color: #1e3a8a;
+}
+
+.score {
+    font-size: 25px;
+    font-weight: bold;
+    color: #2563eb;
+    margin: 25px 0;
+}
+
+.comment {
+    font-size: 17px;
+    color: #475569;
+    line-height: 1.6;
+    margin: 20px 0;
+}
+
+.result-icon {
+    font-size: 65px;
+    margin: 15px 0;
+}
+
+.restart {
+    background: #2563eb;
+    color: white;
+    border: none;
+    border-radius: 12px;
+    padding: 15px 30px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 20px;
+    transition: 0.2s;
+}
+
+.restart:hover {
+    background: #1d4ed8;
+    transform: translateY(-2px);
+}
+
+.footer {
+    text-align: center;
+    color: #94a3b8;
+    font-size: 12px;
+    margin-top: 30px;
+}
+
+@media (max-width: 600px) {
+    .container {
+        padding: 22px;
+    }
+
+    h1 {
+        font-size: 22px;
+    }
+
+    .question {
+        font-size: 17px;
+    }
+
+    .option {
+        font-size: 14px;
+        padding: 14px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>🧪 Тест: Типы химических реакций</h1>
+
+    <p class="subtitle">
+        Проверь свои знания по химии!
+    </p>
+
+    <div id="quiz">
+
+        <div class="progress-info">
+            <span id="progressText">Вопрос 1 из 10</span>
+            <span id="percent">10%</span>
+        </div>
+
+        <div class="progress-bar">
+            <div class="progress" id="progress"></div>
+        </div>
+
+        <div class="question" id="question"></div>
+
+        <div class="options" id="options"></div>
+
+    </div>
+
+    <div id="result" class="result" style="display:none;"></div>
+
+    <div class="footer">
+        Интерактивный тест по химии
+    </div>
+
+</div>
+
+<script>
+
+const questions = [
+
+{
+    question: "Укажите уравнение реакции соединения среди приведенных вариантов:",
+    options: [
+        "A) CaO + H2O → Ca(OH)2",
+        "B) CaCO3 → CaO + CO2",
+        "C) Zn + 2HCl → ZnCl2 + H2",
+        "D) NaOH + HCl → NaCl + H2O"
+    ],
+    answer: "A"
+},
+
+{
+    question: "Какое из следующих уравнений описывает реакцию разложения?",
+    options: [
+        "A) 2H2 + O2 → 2H2O",
+        "B) 2KClO3 → 2KCl + 3O2",
+        "C) Fe + CuSO4 → FeSO4 + Cu",
+        "D) KOH + HNO3 → KNO3 + H2O"
+    ],
+    answer: "B"
+},
+
+{
+    question: "Выберите уравнение, которое относится к реакциям замещения:",
+    options: [
+        "A) Na2O + H2O → 2NaOH",
+        "B) CaCO3 → CaO + CO2",
+        "C) Cl2 + 2NaBr → 2NaCl + Br2",
+        "D) BaCl2 + H2SO4 → BaSO4↓ + 2HCl"
+    ],
+    answer: "C"
+},
+
+{
+    question: "Какое уравнение иллюстрирует реакцию обмена?",
+    options: [
+        "A) N2 + 3H2 ⇄ 2NH3",
+        "B) CuSO4 + 2NaOH → Cu(OH)2↓ + Na2SO4",
+        "C) Zn + 2HCl → ZnCl2 + H2",
+        "D) 2Mg + O2 → 2MgO"
+    ],
+    answer: "B"
+},
+
+{
+    question: "Какая из реакций является одновременно реакцией соединения и окислительно-восстановительной?",
+    options: [
+        "A) SO3 + H2O → H2SO4",
+        "B) CaO + CO2 → CaCO3",
+        "C) 2NO + O2 → 2NO2",
+        "D) NaOH + HCl → NaCl + H2O"
+    ],
+    answer: "C"
+},
+
+{
+    question: "Укажите уравнение необратимой реакции (по признаку выпадения осадка) среди представленных:",
+    options: [
+        "A) Ba2+ + SO4(2-) → BaSO4↓",
+        "B) N2 + 3H2 ⇄ 2NH3",
+        "C) CO2 + H2O ⇄ H2CO3",
+        "D) CH3COOH + C2H5OH ⇄ CH3COOC2H5 + H2O"
+    ],
+    answer: "A"
+},
+
+{
+    question: "Какая реакция относится к реакциям замещения с участием галогенов?",
+    options: [
+        "A) H2 + Cl2 → 2HCl",
+        "B) 2NaBr + Cl2 → 2NaCl + Br2",
+        "C) CaCO3 → CaO + CO2",
+        "D) NaOH + HCl → NaCl + H2O"
+    ],
+    answer: "B"
+},
+
+{
+    question: "Какое из уравнений описывает реакцию нейтрализации (частный случай обмена)?",
+    options: [
+        "A) Zn + 2HCl → ZnCl2 + H2",
+        "B) NaOH + HCl → NaCl + H2O",
+        "C) AgNO3 + NaCl → AgCl↓ + NaNO3",
+        "D) CuO + H2 → Cu + H2O"
+    ],
+    answer: "B"
+},
+
+{
+    question: "Выберите уравнение реакции разложения, протекающей с поглощением теплоты (эндотермической):",
+    options: [
+        "A) C + O2 → CO2",
+        "B) 2Mg + O2 → 2MgO",
+        "C) CaCO3 → CaO + CO2",
+        "D) 2H2 + O2 → 2H2O"
+    ],
+    answer: "C"
+},
+
+{
+    question: "Какой тип химической реакции иллюстрирует уравнение Fe2O3 + 3H2 → 2Fe + 3H2O?",
+    options: [
+        "A) Соединение",
+        "B) Разложение",
+        "C) Замещение",
+        "D) Обмен"
+    ],
+    answer: "C"
+}
+
+];
+
+let currentQuestion = 0;
+let score = 0;
+let answered = false;
+
+const questionElement = document.getElementById("question");
+const optionsElement = document.getElementById("options");
+const progressText = document.getElementById("progressText");
+const progress = document.getElementById("progress");
+const percent = document.getElementById("percent");
+const quiz = document.getElementById("quiz");
+const result = document.getElementById("result");
+
+function loadQuestion() {
+
+    answered = false;
+
+    const q = questions[currentQuestion];
+
+    progressText.textContent =
+        `Вопрос ${currentQuestion + 1} из ${questions.length}`;
+
+    const progressPercent =
+        ((currentQuestion + 1) / questions.length) * 100;
+
+    progress.style.width = progressPercent + "%";
+    percent.textContent = Math.round(progressPercent) + "%";
+
+    questionElement.textContent = q.question;
+
+    optionsElement.innerHTML = "";
+
+    q.options.forEach((option, index) => {
+
+        const button = document.createElement("button");
+
+        button.className = "option";
+        button.textContent = option;
+
+        button.addEventListener("click", () => {
+            checkAnswer(index);
+        });
+
+        optionsElement.appendChild(button);
+
+    });
+
+}
+
+function checkAnswer(index) {
+
+    if (answered) return;
+
+    answered = true;
+
+    const q = questions[currentQuestion];
+
+    const buttons = optionsElement.querySelectorAll(".option");
+
+    const selectedLetter = ["A", "B", "C", "D"][index];
+
+    buttons.forEach(button => {
+        button.disabled = true;
+    });
+
+    if (selectedLetter === q.answer) {
+
+        buttons[index].classList.add("correct");
+        score++;
+
+    } else {
+
+        buttons[index].classList.add("wrong");
+
+        const correctIndex =
+            ["A", "B", "C", "D"].indexOf(q.answer);
+
+        buttons[correctIndex].classList.add("correct");
+
+    }
+
+    setTimeout(() => {
+
+        currentQuestion++;
+
+        if (currentQuestion < questions.length) {
+            loadQuestion();
+        } else {
+            showResults();
+        }
+
+    }, 1200);
+
+}
+
+function showResults() {
+
+    quiz.style.display = "none";
+
+    const total = questions.length;
+
+    const percentage = (score / total) * 100;
+
+    let comment;
+    let icon;
+
+    if (score === total) {
+
+        comment = "Великолепно! Отличное знание химических реакций.";
+        icon = "🏆";
+
+    } else if (score >= 7) {
+
+        comment = "Хороший результат! Вы уверенно ориентируетесь в темах.";
+        icon = "👏";
+
+    } else {
+
+        comment = "Стоит повторить классификацию химических реакций.";
+        icon = "📚";
+
+    }
+
+    result.style.display = "block";
+
+    result.innerHTML = `
+        <div class="result-icon">${icon}</div>
+
+        <h2>Тест завершен!</h2>
+
+        <div class="score">
+            Ваш результат: ${score} из ${total}
+            <br>
+            (${percentage.toFixed(1)}%)
+        </div>
+
+        <div class="comment">
+            ${comment}
+        </div>
+
+        <button class="restart" onclick="restartQuiz()">
+            🔄 Пройти заново
+        </button>
+    `;
+
+}
+
+function restartQuiz() {
+
+    currentQuestion = 0;
+    score = 0;
+    answered = false;
+
+    result.style.display = "none";
+    quiz.style.display = "block";
+
+    loadQuestion();
+
+}
+
+loadQuestion();
+
+</script>
+
+</body>
+</html>
